@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ruinthralm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --desk: #00aaaa;
+    --win: #fae8c1;
+    --ink: #000000;
+    --blue: #0000aa;
+    --hi: #ffff55;
+    --font: "VT323", "Courier New", monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background-color: var(--desk); background-size: cover; background-position: center; background-repeat: no-repeat; background-attachment: fixed; color: var(--ink); font-family: var(--font); font-size: 21px; line-height: 1.3; }
+  a { color: var(--blue); }
+  a:focus-visible, iframe:focus-visible, button:focus-visible { outline: 3px solid var(--hi); outline-offset: 2px; }
+
+  /* One column, centered */
+  .desktop { max-width: 640px; margin: 0 auto; padding: 24px 14px 48px; display: flex; flex-direction: column; gap: 22px; }
+
+  /* Window */
+  .window { background: var(--win); border: 3px solid var(--ink); box-shadow: 6px 6px 0 var(--ink); }
+  .title { background: var(--ink); color: var(--win); display: flex; align-items: center; gap: 10px; padding: 2px 6px; font-size: 22px; letter-spacing: .04em; }
+  .title .box { width: 16px; height: 16px; border: 2px solid var(--win); flex: none; }
+  .title .name { flex: 1; text-align: center; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .title .up { font-size: 16px; flex: none; }
+  .menu { display: flex; gap: 18px; padding: 3px 10px; border-bottom: 3px solid var(--ink); }
+  .menu a { color: var(--ink); text-decoration: none; }
+  .menu a:hover { background: var(--ink); color: var(--win); }
+  .body { padding: 16px; }
+
+  /* Hero window */
+  h1 { font-weight: 400; font-size: clamp(44px, 13vw, 84px); line-height: .95; margin: 0 0 8px; text-transform: uppercase; word-break: break-word; }
+  .tagline { margin: 0; }
+
+  /* Embeds */
+  iframe { width: 100%; border: 3px solid var(--ink); display: block; background: #ddd; }
+  .video { aspect-ratio: 16 / 9; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+  .empty { border: 3px dashed var(--ink); padding: 18px; min-height: 90px; display: flex; align-items: center; }
+
+  /* Buttons */
+  .links { display: flex; flex-wrap: wrap; gap: 12px; padding: 0; margin: 0; list-style: none; }
+  .links a { display: block; background: var(--win); color: var(--ink); text-decoration: none; border: 3px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); padding: 4px 16px; }
+  .links a:hover { background: var(--hi); }
+  .links a:active { box-shadow: none; transform: translate(3px, 3px); }
+
+  .about { white-space: pre-line; margin: 0; }
+  .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+  .gallery a { display: block; border: 3px solid var(--ink); aspect-ratio: 1; }
+  .gallery img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  footer { text-align: center; background: var(--win); border: 3px solid var(--ink); padding: 2px 8px; align-self: center; }
+</style>
+</head>
+<body>
+<main class="desktop">
+
+  <div class="window">
+    <div class="title"><span class="box"></span><span class="name">RUINTHRALM.EXE</span><span class="up">&#9650;</span></div>
+    <nav class="menu" aria-label="Main">
+      <a href="#about">About</a>
+      <a href="#listen">Listen</a>
+      <a href="#watch">Watch</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#follow">Follow</a>
+    </nav>
+    <div class="body">
+      <h1 id="band-name">Ruinthralm</h1>
+      <p class="tagline" id="tagline">One line about your sound.</p>
+    </div>
+  </div>
+
+  <div class="window" id="about">
+    <div class="title"><span class="box"></span><span class="name">ABOUT.TXT</span><span class="up">&#9650;</span></div>
+    <div class="body"><p class="about" id="about-text"></p></div>
+  </div>
+
+  <div class="window" id="listen">
+    <div class="title"><span class="box"></span><span class="name">LISTEN</span><span class="up">&#9650;</span></div>
+    <div class="body stack">
+      <div id="spotify"></div>
+    </div>
+  </div>
+
+  <div class="window" id="watch">
+    <div class="title"><span class="box"></span><span class="name">WATCH</span><span class="up">&#9650;</span></div>
+    <div class="body stack" id="videos"></div>
+  </div>
+
+  <div class="window" id="gallery">
+    <div class="title"><span class="box"></span><span class="name">GALLERY</span><span class="up">&#9650;</span></div>
+    <div class="body"><div class="gallery" id="gallery-grid"></div></div>
+  </div>
+
+  <div class="window" id="more">
+    <div class="title"><span class="box"></span><span class="name">MORE</span><span class="up">&#9650;</span></div>
+    <div class="body stack" id="more-embeds"></div>
+  </div>
+
+  <div class="window" id="follow">
+    <div class="title"><span class="box"></span><span class="name">FOLLOW</span><span class="up">&#9650;</span></div>
+    <div class="body">
+      <ul class="links" id="socials"></ul>
+    </div>
+  </div>
+
+  <footer>&copy; <span id="year"></span> <span id="footer-name">Ruinthralm</span></footer>
+</main>
+
+<script>
+/* ============================================================
+   EDIT THIS PART ONLY. Everything below it builds the page.
+   ============================================================ */
+const BAND = {
+  name: "ruinthralm*",
+  tagline: "progressive post-hardcore.",
+
+  // Background image: a link, or a file name like "images/bg.jpg".
+  // Leave blank for the plain teal desktop.
+  background: "images/bg.jpg",
+
+  // Intro text. Leave blank to hide this section. Line breaks are kept.
+  about: "",
+
+  // Spotify: Share > Copy link on your artist, album or playlist page.
+  spotify: "https://open.spotify.com/artist/1ZZaAbUnroJNoyPmBAVQij",
+  spotifyHeight: 352, // 0 = automatic. Set a number like 352 or 152 to force a height.
+
+  // YouTube: paste as many video links as you want.
+  youtube: [
+    "https://www.youtube.com/watch?v=MhA01VDWhME",
+  ],
+
+  // Gallery: image links or file names. Leave empty to hide the section.
+  gallery: [
+    "images/img1.jpg",
+    // "images/photo2.jpg",
+  ],
+
+  // Other embeds (Bandcamp, Apple Music, etc): paste the full embed code.
+  // Leave empty to hide the section.
+  moreEmbeds: [
+    // '<iframe src="https://..." height="352"></iframe>',
+  ],
+
+  // Socials: label + link. Blank links are hidden.
+  socials: [
+    { label: "Instagram", url: "https://www.instagram.com/ruinthralm/" },
+    { label: "TikTok",    url: "https://www.tiktok.com/@ruinthralm" },
+    { label: "Facebook",  url: "" },
+    { label: "Bandcamp",  url: "" },
+    { label: "YouTube",   url: "https://www.youtube.com/@ruinthralm" },
+  ],
+};
+/* ============================================================ */
+
+const $ = (id) => document.getElementById(id);
+
+function emptyBox(text) {
+  const d = document.createElement("div");
+  d.className = "empty";
+  d.textContent = text;
+  return d;
+}
+
+function makeFrame(src, title) {
+  const f = document.createElement("iframe");
+  f.src = src;
+  f.title = title;
+  f.loading = "lazy";
+  f.referrerPolicy = "strict-origin-when-cross-origin";
+  f.allow = "autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture";
+  return f;
+}
+
+function youtubeId(url) {
+  const m = url.match(/(?:v=|youtu\.be\/|embed\/|shorts\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+
+document.title = BAND.name;
+$("band-name").textContent = BAND.name;
+$("tagline").textContent = BAND.tagline;
+$("footer-name").textContent = BAND.name;
+$("year").textContent = new Date().getFullYear();
+
+// Spotify
+if (BAND.spotify) {
+  const path = BAND.spotify.replace(/^https?:\/\/open\.spotify\.com\//, "").split("?")[0];
+  const f = makeFrame("https://open.spotify.com/embed/" + path, "Spotify player");
+  // Tracks, episodes and artists use the short player. Albums and playlists use the tall one.
+  f.height = BAND.spotifyHeight || (/^(track|episode|artist)\//.test(path) ? 152 : 352);
+  f.style.background = "transparent";
+  // Border goes on the wrapper so the player gets its full height (a border on the iframe shrinks it).
+  f.style.border = "0";
+  $("spotify").style.border = "3px solid var(--ink)";
+  $("spotify").appendChild(f);
+} else {
+  $("spotify").appendChild(emptyBox("Add your Spotify link in the BAND settings."));
+}
+
+// YouTube
+const ids = BAND.youtube.map(youtubeId).filter(Boolean);
+if (ids.length) {
+  ids.forEach((id, i) => {
+    const f = makeFrame("https://www.youtube-nocookie.com/embed/" + id, "YouTube video " + (i + 1));
+    f.className = "video";
+    f.allowFullscreen = true;
+    $("videos").appendChild(f);
+  });
+} else {
+  $("videos").appendChild(emptyBox("Add a YouTube link in the BAND settings."));
+}
+
+// Socials
+const shown = BAND.socials.filter((s) => s.url);
+if (shown.length) {
+  shown.forEach((s) => {
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = s.url;
+    a.textContent = s.label;
+    a.target = "_blank";
+    a.rel = "noopener noreferrer";
+    li.appendChild(a);
+    $("socials").appendChild(li);
+  });
+} else {
+  const li = document.createElement("li");
+  li.textContent = "Add your social links in the BAND settings.";
+  $("socials").appendChild(li);
+}
+
+// Background image
+if (BAND.background) {
+  document.body.style.backgroundImage = 'url("' + BAND.background + '")';
+}
+
+// About
+if (BAND.about) {
+  $("about-text").textContent = BAND.about;
+}
+
+// Gallery
+BAND.gallery.forEach((src, i) => {
+  const a = document.createElement("a");
+  a.href = src;
+  a.target = "_blank";
+  a.rel = "noopener noreferrer";
+  const img = document.createElement("img");
+  img.src = src;
+  img.alt = "Band photo " + (i + 1);
+  img.loading = "lazy";
+  a.appendChild(img);
+  $("gallery-grid").appendChild(a);
+});
+
+// More embeds
+BAND.moreEmbeds.forEach((code) => {
+  const d = document.createElement("div");
+  d.innerHTML = code;
+  $("more-embeds").appendChild(d);
+});
+
+// Hide sections with nothing in them (and their menu links)
+[["about", !!BAND.about], ["gallery", BAND.gallery.length > 0], ["more", BAND.moreEmbeds.length > 0]]
+  .forEach(([id, has]) => {
+    if (has) return;
+    $(id).hidden = true;
+    const link = document.querySelector('.menu a[href="#' + id + '"]');
+    if (link) link.hidden = true;
+  });
+</script>
+</body>
+</html>
